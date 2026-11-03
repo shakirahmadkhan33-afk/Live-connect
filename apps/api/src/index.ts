@@ -4,12 +4,14 @@ import cors from 'cors';
 import helmet from 'helmet';
 
 import { authRouter } from './auth';
+import { usersRouter } from './users';
 
 const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/users', usersRouter);
 
 app.get('/api/v1/health', (_req, res) => {
   res.json({ status: 'ok', service: 'liveconnect-api' });
