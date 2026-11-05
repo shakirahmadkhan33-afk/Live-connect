@@ -10,3 +10,6 @@ build/
 *.backup
 *-backup
 *.v1
+*.backup
+*.backup2
+*.backup3
