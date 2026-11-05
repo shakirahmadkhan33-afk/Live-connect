@@ -13,3 +13,4 @@ build/
 *.backup
 *.backup2
 *.backup3
+*.backup-otp
