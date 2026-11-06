@@ -33,20 +33,23 @@ async function issueCode(userId: string, email: string) {
   }
 
   const code = String(randomInt(0, 1000000)).padStart(6, '0');
-  await db.insert(emailVerifications).values({
+  const [created] = await db.insert(emailVerifications).values({
     userId,
     email,
     codeHash: hashCode(userId, code),
     purpose: 'verify_email',
     expiresAt: new Date(Date.now() + CODE_TTL_MS),
-  });
+  }).returning({ id: emailVerifications.id });
 
   const sent = await sendEmail(
     email,
     'Your LiveConnect code',
     'Your verification code is ' + code + '. It expires in 10 minutes.',
   );
-  if (!sent) return { error: 'email_failed' as const };
+  if (!sent) {
+    await db.delete(emailVerifications).where(eq(emailVerifications.id, created.id));
+    return { error: 'email_failed' as const };
+  }
   return { ok: true as const };
 }
 

@@ -10,6 +10,7 @@ import { AuthProvider, useAuth } from './src/context/AuthContext';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import HomeScreen from './src/screens/HomeScreen';
+import VerifyScreen from './src/screens/VerifyScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import PlaceholderScreen from './src/screens/PlaceholderScreen';
 
@@ -57,7 +58,8 @@ function Tabs() {
 }
 
 function Root() {
-  const { user, loading } = useAuth();
+  const { user, loading, refreshUser } = useAuth();
+  React.useEffect(() => { if (user && user.isVerified === undefined) refreshUser(); }, [user]);
 
   if (loading) {
     return (
@@ -69,8 +71,10 @@ function Root() {
 
   return (
     <NavigationContainer theme={theme}>
-      {user ? (
+      {user && user.isVerified ? (
         <Tabs />
+      ) : user ? (
+        <VerifyScreen />
       ) : (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />

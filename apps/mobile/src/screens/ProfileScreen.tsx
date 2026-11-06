@@ -7,6 +7,8 @@ export default function ProfileScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: '#101020', alignItems: 'center', justifyContent: 'center' }}>
       <Text style={{ color: '#fff', fontSize: 22, fontWeight: 'bold' }}>@{user?.username}</Text>
+      <Text style={{ color: '#9999B5', marginTop: 8 }}>{user?.email || ''}</Text>
+      <Text style={{ color: user?.isVerified ? '#34D399' : '#FBBF24', marginTop: 6 }}>{user?.isVerified ? 'Email verified' : 'Email not verified'}</Text>
       <TouchableOpacity
         onPress={logout}
         style={{ marginTop: 24, backgroundColor: '#F04467', paddingHorizontal: 28, paddingVertical: 12, borderRadius: 14 }}

@@ -32,7 +32,7 @@ export default function HomeScreen() {
       </View>
 
       <View style={s.sectionHeader}>
-        <Text style={s.sectionTitle}>Live Now</Text>
+        <Text style={s.sectionTitle}>Live Now (Demo)</Text>
         <Text style={s.seeAll}>See all  →</Text>
       </View>
 
@@ -52,7 +52,7 @@ export default function HomeScreen() {
       </ScrollView>
 
       <View style={s.sectionHeader}>
-        <Text style={s.sectionTitle}>Featured Live</Text>
+        <Text style={s.sectionTitle}>Featured Live (Demo)</Text>
         <Text style={s.seeAll}>Explore  →</Text>
       </View>
 

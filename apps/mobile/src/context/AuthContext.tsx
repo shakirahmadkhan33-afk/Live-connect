@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { apiLogin, apiRegister, apiRefresh, apiLogout, User } from '../services/api';
+import { apiLogin, apiRegister, apiRefresh, apiLogout, apiMe, User } from '../services/api';
 
 type Ctx = {
   user: User | null;
@@ -8,6 +8,7 @@ type Ctx = {
   login: (identifier: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 };
 
 const AuthContext = createContext<Ctx>(null as any);
@@ -57,6 +58,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await login(username, password);
   };
 
+  const refreshUser = async () => {
+    try {
+      const token = await SecureStore.getItemAsync(K.access);
+      if (!token) return;
+      const me = await apiMe(token);
+      const next = { id: me.id, username: me.username, email: me.email, isVerified: me.isVerified };
+      await SecureStore.setItemAsync(K.user, JSON.stringify(next));
+      setUser(next);
+    } catch {}
+  };
+
   const logout = async () => {
     try {
       const refresh = await SecureStore.getItemAsync(K.refresh);
@@ -67,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
